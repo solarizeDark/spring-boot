@@ -6,10 +6,46 @@ POST http://localhost:8080/students
 Content-Type: application/json
 
 {
-
-  "name": "Ele",
-  "surname": "Eleoff",
+  "name": "Egor",
+  "surname": "Fedusiv",
   "age": "20",
   "group": "a0001"
+
+}
+
+###
+
+POST http://localhost:8080/students/addALL
+Content-Type: application/json
+
+
+[
+  {
+    "name": "petr",
+    "surname": "Petroff",
+    "age": "20",
+    "group": "a0001"
+  },
+
+  {
+    "name": "Ivan",
+    "surname": "Ivanoff",
+    "age": "20",
+    "group": "a0001"
+  }
+
+]
+
+
+###
+
+POST http://localhost:8080/signUp
+Content-Type: application/json
+
+{
+
+  "email": "foo73bar@gmail.com",
+  "username": "Olor",
+  "password": "olo&*99"
 
 }

@@ -4,18 +4,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import ru.fedusiv.dto.Bio;
+import ru.fedusiv.dto.ValidList;
 import ru.fedusiv.entities.Group;
 import ru.fedusiv.entities.Student;
 import ru.fedusiv.exceptions.NoEntityException;
-import ru.fedusiv.exceptions.SaveException;
+import ru.fedusiv.exceptions.EntitySaveException;
 import ru.fedusiv.services.GroupsService;
 import ru.fedusiv.services.StudentsService;
 
+import javax.print.attribute.standard.Media;
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -59,13 +61,30 @@ public class StudentsController {
     }
 
     @PostMapping(value = "/students", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> addNewStudent(@RequestBody Bio bio) {
-        try {
-            studentsService.save(bio);
-            return new ResponseEntity<>("successfully saved", HttpStatus.OK);
-        } catch (SaveException | NoEntityException exception) {
-            return new ResponseEntity<>("error occurred", HttpStatus.BAD_REQUEST);
+    public ResponseEntity<String> addNewStudent(@Valid @RequestBody Bio bio, BindingResult bindingResult)
+            throws NoEntityException, EntitySaveException {
+
+        StringBuilder response = new StringBuilder();
+
+        if (bindingResult.hasErrors()) {
+            bindingResult.getAllErrors()
+                    .forEach(error -> response.append(error.getDefaultMessage()).append("\n"));
+            throw new EntitySaveException("Student", response.toString());
         }
+
+        studentsService.save(bio);
+        return new ResponseEntity<>("successfully saved", HttpStatus.OK);
     }
 
+    @PostMapping(value = "/students/addALL", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> addNewStudents(@RequestBody @Valid ValidList<Bio> biographies,
+                                                 BindingResult bindingResult)
+            throws EntitySaveException, NoEntityException {
+
+        /* TODO adding list */
+
+
+        studentsService.saveAll(biographies);
+        return new ResponseEntity<>("successfully saved", HttpStatus.OK);
+    }
 }

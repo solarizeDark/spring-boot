@@ -10,5 +10,6 @@ import java.util.List;
 @Repository
 public interface StudentsRepository extends JpaRepository<Student, Long> {
 
+    Student findByNameAndSurname(String name, String surname);
 
 }

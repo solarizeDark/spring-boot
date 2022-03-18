@@ -1,8 +1,6 @@
 package ru.fedusiv.entities;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.*;
-import ru.fedusiv.validation.annotations.UsernamePasswordNonEquality;
 
 import javax.persistence.*;
 import java.time.LocalDate;

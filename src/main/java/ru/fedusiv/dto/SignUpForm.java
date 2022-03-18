@@ -5,28 +5,33 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Email;
-import ru.fedusiv.validation.annotations.UsernamePasswordNonEquality;
+import ru.fedusiv.validation.annotations.FieldsNonEquality;
+import ru.fedusiv.validation.annotations.ValidInitials;
 import ru.fedusiv.validation.annotations.ValidPassword;
-import ru.fedusiv.validation.annotations.ValidUsername;
+
+import javax.validation.constraints.NotNull;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@UsernamePasswordNonEquality(
+@FieldsNonEquality(
         message = "{signUp.UsernamePasswordEquality}",
-        password = "password",
-        username = "username"
+        field1 = "password",
+        field2 = "username"
 )
 public class SignUpForm {
 
+    @NotNull
     @Email(message = "{signUp.incorrectEmail}")
     private String email;
 
+    @NotNull
     @ValidPassword(message = "{signUp.invalidPassword}")
     private String password;
 
-    @ValidUsername(message = "{signUp.invalidUsername}")
+    @NotNull
+    @ValidInitials(message = "{signUp.invalidUsername}")
     private String username;
 
 }

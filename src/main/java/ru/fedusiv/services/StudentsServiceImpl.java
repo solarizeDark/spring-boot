@@ -39,7 +39,7 @@ public class StudentsServiceImpl  implements StudentsService {
             studentsRepository.save(student);
             return student;
         } catch (DataIntegrityViolationException exception) {
-            throw new SaveException(" bio");
+            throw new SaveException("bio");
         }
     }
 

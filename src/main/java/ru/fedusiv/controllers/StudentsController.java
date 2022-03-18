@@ -5,22 +5,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import ru.fedusiv.dto.Bio;
-import ru.fedusiv.dto.ValidList;
 import ru.fedusiv.entities.Group;
 import ru.fedusiv.entities.Student;
-import ru.fedusiv.exceptions.NoEntityException;
 import ru.fedusiv.exceptions.EntitySaveException;
+import ru.fedusiv.exceptions.NoEntityException;
 import ru.fedusiv.services.GroupsService;
 import ru.fedusiv.services.StudentsService;
 
-import javax.print.attribute.standard.Media;
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
+@Validated
 public class StudentsController {
 
     @Autowired
@@ -53,7 +53,6 @@ public class StudentsController {
             @RequestParam(value = "groupId") String groupId) {
         try {
             Group group = groupsService.getGroupById(groupId);
-            List<Student> students = group.getStudents();
             return group.getStudents();
         } catch (NoEntityException exception) {
             throw new IllegalArgumentException(exception);
@@ -77,12 +76,8 @@ public class StudentsController {
     }
 
     @PostMapping(value = "/students/addALL", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> addNewStudents(@RequestBody @Valid ValidList<Bio> biographies,
-                                                 BindingResult bindingResult)
+    public ResponseEntity<String> addStudents(@RequestBody @Valid List<Bio> biographies)
             throws EntitySaveException, NoEntityException {
-
-        /* TODO adding list */
-
 
         studentsService.saveAll(biographies);
         return new ResponseEntity<>("successfully saved", HttpStatus.OK);

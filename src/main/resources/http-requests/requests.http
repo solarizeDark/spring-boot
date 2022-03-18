@@ -22,7 +22,7 @@ Content-Type: application/json
 [
   {
     "name": "petr",
-    "surname": "Petroff",
+    "surname": "petroff",
     "age": "20",
     "group": "a0001"
   },

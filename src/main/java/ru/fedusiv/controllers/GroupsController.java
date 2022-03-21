@@ -19,5 +19,10 @@ public class GroupsController {
         return groupsService.getGroupById(id);
     }
 
+//    @GetMapping("/")
+//    @ResponseBody
+//    public ResponseEntity<Group> getInfo() {
+//    }
+
 
 }

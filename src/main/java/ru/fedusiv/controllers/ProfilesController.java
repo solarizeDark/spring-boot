@@ -16,7 +16,7 @@ import ru.fedusiv.services.interfaces.StudentsService;
 import ru.fedusiv.services.interfaces.UsersService;
 
 @Controller
-public class ProfileController {
+public class ProfilesController {
 
     @Autowired
     private StudentsService studentsService;

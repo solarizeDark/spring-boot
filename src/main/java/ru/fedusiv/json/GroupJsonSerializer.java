@@ -8,14 +8,14 @@ import ru.fedusiv.entities.Group;
 
 import java.io.IOException;
 
-@JsonComponent
+//@JsonComponent
 public class GroupJsonSerializer extends JsonSerializer<Group> {
 
     @Override
     public void serialize(Group group, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         try {
             TemplateJsonSerializer.serializeRec(group, jsonGenerator, serializerProvider, 0);
-        } catch (IllegalAccessException e) {
+        } catch (IllegalAccessException | NoSuchFieldException e) {
            throw new IllegalArgumentException(e);
         }
     }

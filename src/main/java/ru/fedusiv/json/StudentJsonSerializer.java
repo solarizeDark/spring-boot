@@ -8,14 +8,14 @@ import ru.fedusiv.entities.Student;
 
 import java.io.IOException;
 
-@JsonComponent
+//@JsonComponent
 public class StudentJsonSerializer extends JsonSerializer<Student> {
 
     @Override
     public void serialize(Student student, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         try {
             TemplateJsonSerializer.serializeRec(student, jsonGenerator, serializerProvider, 0);
-        } catch (IllegalAccessException e) {
+        } catch (IllegalAccessException | NoSuchFieldException e) {
             throw new IllegalArgumentException(e);
         }
     }

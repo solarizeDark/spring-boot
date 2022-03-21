@@ -2,12 +2,13 @@ package ru.fedusiv.json;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import org.springframework.hateoas.Link;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class TemplateJsonSerializer {
 
@@ -18,10 +19,12 @@ public class TemplateJsonSerializer {
             };
 
     public static <T> void serializeRec(T entity, JsonGenerator generator, SerializerProvider serializerProvider, int level)
-            throws IOException, IllegalAccessException {
+            throws IOException, IllegalAccessException, NoSuchFieldException {
 
         generator.writeStartObject();
         Class<?> type = entity.getClass();
+
+        Field f = entity.getClass().getDeclaredField("links");
 
         for (Field field : type.getDeclaredFields()) {
 
@@ -39,6 +42,15 @@ public class TemplateJsonSerializer {
 
             else if (fieldType.equals(LocalDate.class)) {
                 generator.writeStringField(field.getName(), field.get(entity).toString());
+            }
+
+            else if (field.getName().equals("links")) {
+                for (Link link : (ArrayList<Link>) field.get(entity)) {
+                    generator.writeStartObject("_links");
+                    generator.writeStartObject(link.getRel().value());
+                    generator.writeStringField("href", link.getHref());
+                    generator.writeEndObject();
+                }
             }
 
             else if (Arrays.stream(primitiveWrappers).noneMatch(primitive -> primitive == fieldType)) {

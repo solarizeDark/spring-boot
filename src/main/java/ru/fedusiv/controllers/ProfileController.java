@@ -8,12 +8,12 @@ import org.springframework.web.servlet.ModelAndView;
 import ru.fedusiv.dto.Bio;
 import ru.fedusiv.entities.Student;
 import ru.fedusiv.entities.User;
-import ru.fedusiv.exceptions.NoEntityException;
 import ru.fedusiv.exceptions.EntitySaveException;
+import ru.fedusiv.exceptions.NoEntityException;
 import ru.fedusiv.facades.AuthenticationFacade;
 import ru.fedusiv.security.UserDetailsImpl;
-import ru.fedusiv.services.StudentsService;
-import ru.fedusiv.services.UsersService;
+import ru.fedusiv.services.interfaces.StudentsService;
+import ru.fedusiv.services.interfaces.UsersService;
 
 @Controller
 public class ProfileController {

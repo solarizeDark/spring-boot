@@ -1,10 +1,11 @@
-package ru.fedusiv.services;
+package ru.fedusiv.services.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.fedusiv.entities.Group;
 import ru.fedusiv.exceptions.NoEntityException;
 import ru.fedusiv.repositories.GroupsRepository;
+import ru.fedusiv.services.interfaces.GroupsService;
 
 @Service
 public class GroupsServiceImpl implements GroupsService {

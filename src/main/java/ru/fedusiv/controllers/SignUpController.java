@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import ru.fedusiv.dto.SignUpForm;
 import ru.fedusiv.exceptions.EntitySaveException;
-import ru.fedusiv.services.SignUpService;
+import ru.fedusiv.services.interfaces.SignUpService;
 
 import javax.validation.Valid;
 import java.util.Objects;

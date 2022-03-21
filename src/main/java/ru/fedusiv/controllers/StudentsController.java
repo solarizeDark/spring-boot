@@ -7,19 +7,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import ru.fedusiv.dto.Bio;
 import ru.fedusiv.entities.Group;
 import ru.fedusiv.entities.Student;
 import ru.fedusiv.exceptions.EntitySaveException;
 import ru.fedusiv.exceptions.NoEntityException;
-import ru.fedusiv.services.GroupsService;
-import ru.fedusiv.services.StudentsService;
+import ru.fedusiv.services.interfaces.GroupsService;
+import ru.fedusiv.services.interfaces.StudentsService;
 
 import javax.validation.Valid;
 import java.util.List;
 
-@RestController
+@RestController()
+@RequestMapping("/students")
 @Validated
 public class StudentsController {
 
@@ -29,28 +29,17 @@ public class StudentsController {
     @Autowired
     private GroupsService groupsService;
 
-    @GetMapping(value = "/students",
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            params = "studentId")
+    @GetMapping(value = "/{id}",
+            produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Student getStudentByIdGET(@RequestParam("studentId") Long studentId) {
-        return studentsService.getStudentById(studentId);
+    public Student getStudentByIdGET(@PathVariable("id") Long id) {
+        return studentsService.getStudentById(id);
     }
 
-    @GetMapping(value = "/students")
-    public ModelAndView studentsGET() {
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("students");
-        mav.addObject("students", studentsService.findAll());
-        return mav;
-    }
-
-    @GetMapping(value = "/students",
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            params = "groupId")
+    @GetMapping(value = "/group/{id}",
+            produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<Student> getAllStudentsByGroup (
-            @RequestParam(value = "groupId") String groupId) {
+    public List<Student> getAllStudentsByGroup (@PathVariable("id") String groupId) {
         try {
             Group group = groupsService.getGroupById(groupId);
             return group.getStudents();
@@ -59,7 +48,7 @@ public class StudentsController {
         }
     }
 
-    @PostMapping(value = "/students", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> addNewStudent(@Valid @RequestBody Bio bio, BindingResult bindingResult)
             throws NoEntityException, EntitySaveException {
 
@@ -75,7 +64,7 @@ public class StudentsController {
         return new ResponseEntity<>("successfully saved", HttpStatus.OK);
     }
 
-    @PostMapping(value = "/students/addALL", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/addAll", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> addStudents(@RequestBody @Valid List<Bio> biographies)
             throws EntitySaveException, NoEntityException {
 

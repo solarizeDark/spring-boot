@@ -2,7 +2,15 @@ GET http://localhost:8080/students
 
 ###
 
-POST http://localhost:8080/students
+GET http://localhost:8080/students/44
+
+###
+
+GET http://localhost:8080/students/group/a0001
+
+###
+
+POST http://localhost:8080/students/add
 Content-Type: application/json
 
 {
@@ -15,7 +23,7 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:8080/students/addALL
+POST http://localhost:8080/students/addAll
 Content-Type: application/json
 
 
@@ -49,3 +57,7 @@ Content-Type: application/json
   "password": "olo&*99"
 
 }
+
+###
+
+GET http://localhost:8080/groups/a0001

@@ -1,4 +1,4 @@
-package ru.fedusiv.services;
+package ru.fedusiv.services.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -8,6 +8,7 @@ import ru.fedusiv.entities.Role;
 import ru.fedusiv.entities.Status;
 import ru.fedusiv.entities.User;
 import ru.fedusiv.repositories.UsersRepository;
+import ru.fedusiv.services.interfaces.SignUpService;
 
 @Service
 public class SignUpServiceImpl implements SignUpService {

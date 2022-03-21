@@ -1,4 +1,4 @@
-package ru.fedusiv.services;
+package ru.fedusiv.services.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,6 +8,8 @@ import ru.fedusiv.entities.Student;
 import ru.fedusiv.exceptions.NoEntityException;
 import ru.fedusiv.exceptions.EntitySaveException;
 import ru.fedusiv.repositories.StudentsRepository;
+import ru.fedusiv.services.interfaces.GroupsService;
+import ru.fedusiv.services.interfaces.StudentsService;
 import ru.fedusiv.validation.annotations.StudentsValidator;
 
 import java.util.ArrayList;

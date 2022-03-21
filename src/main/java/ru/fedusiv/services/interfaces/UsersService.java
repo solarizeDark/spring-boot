@@ -1,4 +1,4 @@
-package ru.fedusiv.services;
+package ru.fedusiv.services.interfaces;
 
 import org.springframework.stereotype.Service;
 import ru.fedusiv.entities.Student;

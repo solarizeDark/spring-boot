@@ -23,12 +23,7 @@ public class SecurityConfigCsrfDisabled extends WebSecurityConfigurerAdapter {
                 .disable()
                 .authorizeRequests()
                 .antMatchers("/students").permitAll()
-                .and()
-                .formLogin()
-                .loginPage("/signIn")
-                .usernameParameter("username")
-                .defaultSuccessUrl("/profile")
-                .failureUrl("/signUp")
+
         ;
     }
 

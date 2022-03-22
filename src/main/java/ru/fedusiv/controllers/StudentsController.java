@@ -3,7 +3,6 @@ package ru.fedusiv.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -67,6 +66,7 @@ public class StudentsController {
     }
 
     @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @CrossOrigin("http://localhost:9000")
     public ResponseEntity<String> addNewStudent(@Valid @RequestBody Bio bio, BindingResult bindingResult)
             throws NoEntityException, EntitySaveException {
 
@@ -89,4 +89,5 @@ public class StudentsController {
         studentsService.saveAll(biographies);
         return new ResponseEntity<>("successfully saved", HttpStatus.OK);
     }
+
 }

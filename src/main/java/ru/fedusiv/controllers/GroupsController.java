@@ -1,11 +1,13 @@
 package ru.fedusiv.controllers;
 
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
 import org.springframework.web.bind.annotation.*;
 import ru.fedusiv.dto.GroupDto;
 import ru.fedusiv.dto.StudentDto;
-import ru.fedusiv.entities.Group;
 import ru.fedusiv.exceptions.NoEntityException;
 import ru.fedusiv.services.interfaces.GroupsService;
 
@@ -18,6 +20,8 @@ public class GroupsController {
     @Autowired
     private GroupsService groupsService;
 
+    private Logger logger = LoggerFactory.getLogger(GroupsController.class);
+
     @GetMapping(value = "/{id}")
     @ResponseBody
     public GroupDto getGroupById(@PathVariable("id") String id) throws NoEntityException {
@@ -26,6 +30,8 @@ public class GroupsController {
         monitor.setGroup(null);
         Link monitorSelf = linkTo(StudentsController.class).slash(monitor.getId()).withSelfRel();
         monitor.add(monitorSelf);
+
+        logger.info("<GET> http:/127.0.0.1:8080/groups/" + id);
 
         return group;
     }

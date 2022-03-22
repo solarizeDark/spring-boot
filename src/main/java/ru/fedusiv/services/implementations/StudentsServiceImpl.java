@@ -56,8 +56,8 @@ public class StudentsServiceImpl  implements StudentsService {
     }
 
     @Override
-    public Student getStudentById(Long id) {
-        return studentsRepository.findById(id).get();
+    public Student getStudentById(Long id) throws NoEntityException {
+        return studentsRepository.findById(id).orElseThrow(() -> new NoEntityException("Student", id));
     }
 
 }

@@ -4,6 +4,9 @@ import lombok.*;
 import org.springframework.hateoas.RepresentationModel;
 import ru.fedusiv.entities.Student;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Getter
 @Setter
 @Builder
@@ -23,8 +26,16 @@ public class StudentDto extends RepresentationModel<StudentDto> {
                 .age(student.getAge())
                 .name(student.getName())
                 .surname(student.getSurname())
-                .group(GroupDto.of(student.getGroup()))
+                .group(GroupDto.ofBrief(student.getGroup()))
                 .build();
+    }
+
+    public static List<StudentDto> of (List<Student> students) {
+        return students.stream().map(StudentDto::of).collect(Collectors.toList());
+    }
+
+    public StudentDto get() {
+        return this;
     }
 
 }

@@ -12,7 +12,6 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name="students")
-//@JsonSerialize(using = StudentJsonSerializer.class)
 public class Student {
 
     @Id

@@ -11,7 +11,7 @@ public interface StudentsService {
 
     List<Student> findAll();
     Student save(Bio bio) throws NoEntityException, EntitySaveException;
-    Student getStudentById(Long id);
+    Student getStudentById(Long id) throws NoEntityException;
     List<Student> saveAll(List<Bio> biographies) throws NoEntityException, EntitySaveException;
 
 }

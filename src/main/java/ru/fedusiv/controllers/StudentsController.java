@@ -2,7 +2,6 @@ package ru.fedusiv.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -22,8 +21,6 @@ import ru.fedusiv.services.interfaces.GroupsService;
 import ru.fedusiv.services.interfaces.StudentsService;
 
 import javax.validation.Valid;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -41,7 +38,8 @@ public class StudentsController {
 
     @GetMapping(value = "/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpEntity<StudentDto> getStudentByIdGET(@PathVariable("id") Long id) {
+    public StudentDto getStudentByIdGET(@PathVariable("id") Long id) throws NoEntityException {
+
         Student student = studentsService.getStudentById(id);
         StudentDto studentDto = StudentDto.of(student);
         GroupDto groupDto = studentDto.getGroup();
@@ -49,18 +47,23 @@ public class StudentsController {
         Link studentsOfGroupLink =
                 linkTo(StudentsController.class).slash("group").slash(groupDto.getId()).withSelfRel();
         groupDto.add(groupLink, studentsOfGroupLink);
-        return new ResponseEntity<>(studentDto, HttpStatus.OK);
+
+        return studentDto;
     }
 
     @GetMapping(value = "/group/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Student> getAllStudentsByGroup (@PathVariable("id") String groupId) {
-        try {
-            Group group = groupsService.getGroupById(groupId);
-            return group.getStudents();
-        } catch (NoEntityException exception) {
-            throw new IllegalArgumentException(exception);
-        }
+    public CollectionModel<StudentDto> getAllStudentsByGroup (@PathVariable("id") String groupId) throws NoEntityException {
+
+        Group group = groupsService.getGroupById(groupId);
+        List<StudentDto> studentDtos = StudentDto.of(group.getStudents());
+
+        studentDtos.forEach(studentDto -> studentDto.add(
+                linkTo(StudentsController.class).slash(studentDto.getId()).withSelfRel()
+        ));
+
+        Link groupSelfLink = linkTo(GroupsController.class).slash(group.getId()).withSelfRel();
+        return CollectionModel.of(studentDtos, groupSelfLink);
     }
 
     @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE)

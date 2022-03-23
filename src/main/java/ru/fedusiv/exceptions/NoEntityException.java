@@ -6,4 +6,8 @@ public class NoEntityException extends Exception {
         super(entityName + " with " + id.toString() + " id does not exist");
     }
 
+    public <T> NoEntityException(String entityName, String name, String surname) {
+        super(entityName + " with name: " + name + " and surname: " + surname + " does not exist");
+    }
+
 }

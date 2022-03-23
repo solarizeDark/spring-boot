@@ -15,7 +15,7 @@ public class StudentsValidatorImpl implements StudentsValidator {
 
     public void checkStudent(Bio bio) throws EntitySaveException {
 
-        if (studentsRepository.findByNameAndSurname(bio.getName(), bio.getSurname()) != null) {
+        if (studentsRepository.findByNameAndSurname(bio.getName(), bio.getSurname()).isPresent()) {
             throw new EntitySaveException("Student", "Error: student with such name and surname already exists!");
         }
     }

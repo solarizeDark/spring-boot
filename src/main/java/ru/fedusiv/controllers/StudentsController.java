@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.fedusiv.dto.Bio;
 import ru.fedusiv.dto.GroupDto;
 import ru.fedusiv.dto.StudentDto;
+import ru.fedusiv.dto.UpdateStudentDto;
 import ru.fedusiv.entities.Group;
 import ru.fedusiv.entities.Student;
 import ru.fedusiv.exceptions.EntitySaveException;
@@ -37,15 +38,16 @@ public class StudentsController {
 
     @GetMapping(value = "/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public StudentDto getStudentByIdGET(@PathVariable("id") Long id) throws NoEntityException {
+    public StudentDto getStudentById (@PathVariable("id") Long id) throws NoEntityException {
 
         Student student = studentsService.getStudentById(id);
         StudentDto studentDto = StudentDto.of(student);
         GroupDto groupDto = studentDto.getGroup();
-        Link groupLink = linkTo(GroupsController.class).slash(groupDto.getId()).withSelfRel();
         Link studentsOfGroupLink =
                 linkTo(StudentsController.class).slash("group").slash(groupDto.getId()).withSelfRel();
-        groupDto.add(groupLink, studentsOfGroupLink);
+
+        GroupDto.addSelfLink(groupDto, GroupsController.class);
+        groupDto.add(studentsOfGroupLink);
 
         return studentDto;
     }
@@ -57,17 +59,56 @@ public class StudentsController {
         Group group = groupsService.getGroupById(groupId);
         List<StudentDto> studentDtos = StudentDto.of(group.getStudents());
 
-        studentDtos.forEach(studentDto -> studentDto.add(
-                linkTo(StudentsController.class).slash(studentDto.getId()).withSelfRel()
-        ));
+        StudentDto.addSelfLinks(studentDtos, StudentsController.class);
 
         Link groupSelfLink = linkTo(GroupsController.class).slash(group.getId()).withSelfRel();
         return CollectionModel.of(studentDtos, groupSelfLink);
     }
 
+    @GetMapping(value = "/getAll",
+                produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<StudentDto> getAllStudents() {
+        return studentsService.getAll();
+    }
+
+    @GetMapping(value = "/age",
+                    produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<StudentDto> getInAgeRange(@RequestParam Integer left, @RequestParam Integer right) {
+        List<StudentDto> studentDtos = studentsService.getInAgeRange(left, right);
+        StudentDto.addSelfLinks(studentDtos, StudentsController.class);
+        return studentDtos;
+    }
+
+    @GetMapping(value = "/initials",
+                    produces = MediaType.APPLICATION_JSON_VALUE)
+    public StudentDto getByNameAndSurname(@RequestParam String name, @RequestParam String surname)
+            throws NoEntityException {
+
+        StudentDto studentDto = studentsService.findByNameAndSurname(name, surname);
+        StudentDto.addSelfLink(studentDto, StudentsController.class);
+        return studentDto;
+    }
+
+    @PutMapping(value = "/update",
+                    produces = MediaType.APPLICATION_JSON_VALUE)
+    public StudentDto updateStudent(@RequestBody UpdateStudentDto student) throws NoEntityException {
+        return StudentDto.of(studentsService.update(student));
+    }
+
+    @PatchMapping(value = "/patch",
+                    produces = MediaType.APPLICATION_JSON_VALUE)
+    public StudentDto patchStudent(@RequestBody UpdateStudentDto studentDto) throws NoEntityException {
+        return StudentDto.of(studentsService.patchStudent(studentDto));
+    }
+
+    @DeleteMapping(value = "/delete/{id}")
+    public ResponseEntity<String> deleteStudent(@PathVariable("id") Long id) throws NoEntityException {
+        studentsService.delete(id);
+        return new ResponseEntity<>("Deleted", HttpStatus.OK);
+    }
+
     @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @CrossOrigin("http://localhost:9000")
-    public ResponseEntity<String> addNewStudent(@Valid @RequestBody Bio bio, BindingResult bindingResult)
+    public ResponseEntity<String> addNewStudent (@Valid @RequestBody Bio bio, BindingResult bindingResult)
             throws NoEntityException, EntitySaveException {
 
         StringBuilder response = new StringBuilder();
@@ -83,7 +124,7 @@ public class StudentsController {
     }
 
     @PostMapping(value = "/addAll", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> addStudents(@RequestBody @Valid List<Bio> biographies)
+    public ResponseEntity<String> addStudents (@RequestBody @Valid List<Bio> biographies)
             throws EntitySaveException, NoEntityException {
 
         studentsService.saveAll(biographies);

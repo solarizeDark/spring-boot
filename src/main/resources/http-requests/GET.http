@@ -7,3 +7,15 @@ GET http://localhost:8080/students/group/a0001
 ###
 
 GET http://localhost:8080/groups/a0001
+
+###
+
+GET http://localhost:8080/students/getAll
+
+###
+
+GET http://localhost:8080/students/age?left=22&right=24
+
+###
+
+GET http://localhost:8080/students/initials?name=Egor&surname=Fedusiv

@@ -1,0 +1,7 @@
+PATCH http://localhost:8080/students/patch
+Content-Type: application/json
+
+{
+  "id": 44,
+  "age": "19"
+}

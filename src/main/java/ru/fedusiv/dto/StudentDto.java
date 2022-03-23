@@ -7,6 +7,8 @@ import ru.fedusiv.entities.Student;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+
 @Getter
 @Setter
 @Builder
@@ -36,6 +38,14 @@ public class StudentDto extends RepresentationModel<StudentDto> {
 
     public StudentDto get() {
         return this;
+    }
+
+    public static void addSelfLink(StudentDto studentDto, Class<?> controller) {
+        studentDto.add(linkTo(controller).slash(studentDto.getId()).withSelfRel());
+    }
+
+    public static void addSelfLinks(List<StudentDto> studentDtos, Class<?> controller) {
+        studentDtos.forEach(studentDto -> addSelfLink(studentDto, controller));
     }
 
 }

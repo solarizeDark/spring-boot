@@ -5,6 +5,9 @@ import org.springframework.hateoas.RepresentationModel;
 import ru.fedusiv.entities.Group;
 
 import java.time.LocalDate;
+import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @Builder
 @Getter
@@ -33,6 +36,14 @@ public class GroupDto extends RepresentationModel<GroupDto>  {
                 .graduateDate(group.getGraduateDate())
                 .monitor(StudentDto.of(group.getMonitor()))
                 .build();
+    }
+
+    public static void addSelfLink(GroupDto groupDto, Class<?> controller) {
+        groupDto.add(linkTo(controller).slash(groupDto.getId()).withSelfRel());
+    }
+
+    public static void addLinks(List<GroupDto> groupDtos, Class<?> controller) {
+        groupDtos.forEach(groupDto -> addSelfLink(groupDto, controller));
     }
 
 }

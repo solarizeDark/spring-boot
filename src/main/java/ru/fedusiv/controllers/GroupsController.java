@@ -20,8 +20,6 @@ public class GroupsController {
     @Autowired
     private GroupsService groupsService;
 
-    private Logger logger = LoggerFactory.getLogger(GroupsController.class);
-
     @GetMapping(value = "/{id}")
     @ResponseBody
     public GroupDto getGroupById(@PathVariable("id") String id) throws NoEntityException {
@@ -30,8 +28,6 @@ public class GroupsController {
         monitor.setGroup(null);
         Link monitorSelf = linkTo(StudentsController.class).slash(monitor.getId()).withSelfRel();
         monitor.add(monitorSelf);
-
-        logger.info("<GET> http:/127.0.0.1:8080/groups/" + id);
 
         return group;
     }

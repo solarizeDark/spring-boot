@@ -45,4 +45,13 @@ Content-Type: application/json
 
 }
 
+###
 
+POST http://localhost:8080/users/add
+Content-Type: application/json
+
+{
+  "username": "egor",
+  "password": "ili2olo28",
+  "email": "magister47ludi@gmail.com"
+}

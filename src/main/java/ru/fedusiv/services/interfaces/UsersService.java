@@ -1,6 +1,7 @@
 package ru.fedusiv.services.interfaces;
 
 import org.springframework.stereotype.Service;
+import ru.fedusiv.dto.UserDto;
 import ru.fedusiv.entities.Student;
 import ru.fedusiv.entities.User;
 
@@ -8,6 +9,7 @@ import ru.fedusiv.entities.User;
 public interface UsersService {
 
     User findByUsername(String username);
-    void save(User user);
+    User save(UserDto userDto);
+    User confirmAccount(String code);
 
 }

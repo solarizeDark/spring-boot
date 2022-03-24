@@ -11,5 +11,6 @@ import ru.fedusiv.entities.User;
 public interface UsersRepository extends JpaRepository<User, Long> {
 
     User findByUsername(String username);
+    User getByConfirmationCode(String code);
 
 }

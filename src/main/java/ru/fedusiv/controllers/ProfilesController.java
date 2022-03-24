@@ -43,7 +43,7 @@ public class ProfilesController {
         try {
             Student student = studentsService.save(bio);
             user.setStudent(student);
-            usersService.save(user);
+//            usersService.save(user);
         } catch (NoEntityException | EntitySaveException exception) {
             modelAndView.addObject("error", exception.getMessage());
         }

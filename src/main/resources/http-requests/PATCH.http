@@ -5,3 +5,7 @@ Content-Type: application/json
   "id": 44,
   "age": "19"
 }
+
+###
+
+PATCH http://localhost:8080/confirm/58dfb6ed-9824-4d59-8bda-94155eb288b8

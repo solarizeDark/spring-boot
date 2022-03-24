@@ -29,6 +29,8 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    private String confirmationCode;
+
     @Enumerated(EnumType.STRING)
     private Status status;
 

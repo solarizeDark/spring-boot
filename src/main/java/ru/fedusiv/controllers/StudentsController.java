@@ -14,7 +14,6 @@ import ru.fedusiv.dto.GroupDto;
 import ru.fedusiv.dto.StudentDto;
 import ru.fedusiv.dto.UpdateStudentDto;
 import ru.fedusiv.entities.Group;
-import ru.fedusiv.entities.Student;
 import ru.fedusiv.exceptions.EntitySaveException;
 import ru.fedusiv.exceptions.NoEntityException;
 import ru.fedusiv.services.interfaces.GroupsService;
@@ -25,7 +24,7 @@ import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
-@RestController()
+@RestController
 @RequestMapping("/students")
 @Validated
 public class StudentsController {
@@ -40,8 +39,7 @@ public class StudentsController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public StudentDto getStudentById (@PathVariable("id") Long id) throws NoEntityException {
 
-        Student student = studentsService.getStudentById(id);
-        StudentDto studentDto = StudentDto.of(student);
+        StudentDto studentDto = studentsService.getStudentById(id);
         GroupDto groupDto = studentDto.getGroup();
         Link studentsOfGroupLink =
                 linkTo(StudentsController.class).slash("group").slash(groupDto.getId()).withSelfRel();
@@ -68,7 +66,9 @@ public class StudentsController {
     @GetMapping(value = "/getAll",
                 produces = MediaType.APPLICATION_JSON_VALUE)
     public List<StudentDto> getAllStudents() {
-        return studentsService.getAll();
+        List<StudentDto> students = studentsService.getAll();
+        StudentDto.addSelfLinks(students, StudentsController.class);
+        return students;
     }
 
     @GetMapping(value = "/age",

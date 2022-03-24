@@ -74,8 +74,13 @@ public class StudentsServiceImpl  implements StudentsService {
     }
 
     @Override
-    public Student getStudentById(Long id) throws NoEntityException {
-        return studentsRepository.findById(id).orElseThrow(() -> new NoEntityException("Student", id));
+    public StudentDto getStudentById(Long id) throws NoEntityException {
+        return StudentDto.of(
+                studentsRepository
+                        .findById(id)
+                        .orElseThrow(() -> new NoEntityException("Student", id)
+                )
+        );
     }
 
     @Override
@@ -97,9 +102,13 @@ public class StudentsServiceImpl  implements StudentsService {
         );
     }
 
+    public Student getStudentByIdService(Long id) throws NoEntityException {
+        return studentsRepository.findById(id).orElseThrow(() -> new NoEntityException("Student", id));
+    }
+
     @Override
     public Student patchStudent(UpdateStudentDto studentDto) throws NoEntityException {
-        Student student = getStudentById(studentDto.getId());
+        Student student = getStudentByIdService(studentDto.getId());
         for (Field field : UpdateStudentDto.class.getDeclaredFields()) {
             field.setAccessible(true);
             try {

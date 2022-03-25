@@ -28,7 +28,8 @@ public class LoggingAspect {
 
         if (method.getName().matches("get.*")) {
             message.append("<GET> ");
-        } else if (method.getName().matches("add.*")) {
+        } else if (method.getName().matches("add.*")
+                    || method.getName().matches("upload.*")) {
             message.append("<POST> ");
         } else if (method.getName().matches("update.*")) {
             message.append("<PUT> ");

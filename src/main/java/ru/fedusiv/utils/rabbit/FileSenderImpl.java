@@ -1,35 +1,31 @@
 package ru.fedusiv.utils.rabbit;
 
-
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
+import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.amqp.core.Message;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.concurrent.TimeoutException;
+import java.nio.charset.StandardCharsets;
 
 @Component
 public class FileSenderImpl implements FileSender {
 
-    private ConnectionFactory connectionFactory;
-
-    public FileSenderImpl() {
-        connectionFactory = new ConnectionFactory();
-        connectionFactory.setHost("localhost");
-    }
+    @Autowired
+    private AmqpTemplate amqpTemplate;
 
     @Override
     public void send(MultipartFile[] files) {
-        try (Connection connection = connectionFactory.newConnection();
-                Channel channel = connection.createChannel()) {
 
-            for (MultipartFile file: files) {
-                channel.basicPublish("", "files_flow0", null, file.getBytes());
+        for (MultipartFile file: files) {
+            try {
+                amqpTemplate.convertAndSend("spring-boot-exchange", "files.portion", new Message(String.valueOf(10).getBytes(StandardCharsets.UTF_8)));
+                amqpTemplate.convertAndSend("spring-boot-exchange", "files.portion", new Message(file.getOriginalFilename().getBytes(StandardCharsets.UTF_8)));
+                amqpTemplate.convertAndSend("spring-boot-exchange", "files.portion", new Message(file.getBytes()));
+            } catch (IOException e) {
+                throw new IllegalArgumentException(e);
             }
-        } catch (IOException | TimeoutException e) {
-            throw new IllegalArgumentException(e);
         }
     }
 

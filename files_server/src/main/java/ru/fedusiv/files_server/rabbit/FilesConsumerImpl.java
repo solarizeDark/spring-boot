@@ -1,52 +1,48 @@
 package ru.fedusiv.files_server.rabbit;
 
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.DeliverCallback;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.concurrent.TimeoutException;
+import java.util.concurrent.ExecutorService;
 
 @Component
 @Slf4j
 public class FilesConsumerImpl implements FilesConsumer {
 
-    private ConnectionFactory connectionFactory;
+    @Autowired
+    private FilesLoader filesLoader;
 
-    public FilesConsumerImpl() {
-        connectionFactory = new ConnectionFactory();
-        connectionFactory.setHost("localhost");
+    @Autowired
+    private ExecutorService executorService;
+
+    @RabbitListener(queues = "files_audio", concurrency = "4")
+    public void receiveAudio(Message message) {
+        executorService.submit(() -> filesLoader.saveFile(message, "audios"));
     }
 
-    private DeliverCallback deliverCallback = (consumerTag, delivery) -> {
-        FileOutputStream fileOutputStream = new FileOutputStream("file.txt");
-        BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
-        log.info("<Body size>" + delivery.getBody().length);
-        bufferedOutputStream.write(delivery.getBody());
-        bufferedOutputStream.flush();
-    };
+    @RabbitListener(queues = "files_text", concurrency = "4")
+    public void receiveText(Message message) {
+        executorService.submit(() -> filesLoader.saveFile(message, "texts"));
+    }
 
-    @Override
-    public void consume() throws IOException, TimeoutException {
+    @RabbitListener(queues = "files_image", concurrency = "4")
+    public void receiveImage(Message message) {
+        executorService.submit(() -> filesLoader.saveFile(message, "images"));
+    }
 
-        Connection connection = connectionFactory.newConnection();
-        Channel channel = connection.createChannel();
-
-        channel.basicConsume("files_flow0", true, deliverCallback, consumerTag -> {});
-
+    @RabbitListener(queues = "files_video", concurrency = "4")
+    public void receiveVideo(Message message) {
+        executorService.submit(() -> filesLoader.saveFile(message, "videos"));
     }
 
     @EventListener(ApplicationReadyEvent.class)
-    public void start() throws IOException, TimeoutException {
-        log.info("<======STARTED======>");
-        this.consume();
+    public void start() {
+        log.info("<---------STARTED--------->");
     }
 
 }

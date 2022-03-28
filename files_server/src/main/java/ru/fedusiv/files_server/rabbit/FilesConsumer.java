@@ -1,10 +1,12 @@
 package ru.fedusiv.files_server.rabbit;
 
-import java.io.IOException;
-import java.util.concurrent.TimeoutException;
+import org.springframework.amqp.core.Message;
 
 public interface FilesConsumer {
 
-    void consume() throws IOException, TimeoutException;
+    void receiveText(Message message);
+    void receiveAudio(Message message);
+    void receiveVideo(Message message);
+    void receiveImage(Message message);
 
 }

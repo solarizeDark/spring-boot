@@ -4,6 +4,6 @@ import org.springframework.amqp.core.Message;
 
 public interface FilesLoader {
 
-    void saveFile(Message message, String folder);
+    String saveFile(Message message, String folder);
 
 }

@@ -33,6 +33,7 @@ public class FileSenderImpl implements FileSender {
         for (MultipartFile file: files) {
             try {
                 Integer randInt = random.nextInt(10) + 1;
+                randInt = 10;
                 Message fileVal = new Message(file.getBytes());
 
                 fileVal.getMessageProperties().setHeader("id", randInt);
@@ -62,7 +63,7 @@ public class FileSenderImpl implements FileSender {
                 };
 
                 if (type.matches("video.*"))
-                    rabbitTemplate.convertAndSend(exchange, "files.audio", fileVal, mpp, correlationData);
+                    rabbitTemplate.convertAndSend(exchange, "files.video", fileVal, mpp, correlationData);
 
                 if (type.matches("audio.*"))
                     rabbitTemplate.convertAndSend(exchange, "files.audio", fileVal, mpp, correlationData);

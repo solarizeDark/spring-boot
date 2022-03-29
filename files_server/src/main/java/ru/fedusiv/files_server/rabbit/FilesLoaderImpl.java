@@ -13,11 +13,15 @@ import java.util.UUID;
 public class FilesLoaderImpl implements FilesLoader {
 
     @Override
-    public void saveFile(Message message, String folder) {
+    public String saveFile(Message message, String folder) {
         try {
-            String name = message.getMessageProperties().getHeader("filename");
 
-            File file = new File("files\\" + folder + "\\" + UUID.randomUUID() + "_" + name);
+            String name = message.getMessageProperties().getHeader("filename");
+            String tag = UUID.randomUUID().toString();
+
+            String fileName = tag + "_" + name;
+
+            File file = new File("files\\" + folder + "\\" + fileName);
             log.info(name + " saved");
 
             FileOutputStream outputStream = new FileOutputStream(file);
@@ -25,6 +29,8 @@ public class FilesLoaderImpl implements FilesLoader {
 
             bufferedOutputStream.write(message.getBody());
             bufferedOutputStream.flush();
+
+            return fileName;
         } catch (IOException e) {
             throw new IllegalArgumentException(e);
         }

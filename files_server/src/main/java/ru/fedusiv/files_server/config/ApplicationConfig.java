@@ -1,7 +1,11 @@
 package ru.fedusiv.files_server.config;
 
+import com.google.common.util.concurrent.ListeningExecutorService;
+import com.google.common.util.concurrent.MoreExecutors;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import ru.fedusiv.files_server.rabbit.FilesLoader;
 import ru.fedusiv.files_server.rabbit.FilesLoaderImpl;
 
@@ -19,6 +23,16 @@ public class ApplicationConfig {
     @Bean
     public ExecutorService executorService() {
         return Executors.newCachedThreadPool();
+    }
+
+    @Bean
+    public LettuceConnectionFactory redisConnectionFactory() {
+        return new LettuceConnectionFactory(new RedisStandaloneConfiguration("localhost", 6379));
+    }
+
+    @Bean
+    public ListeningExecutorService listeningExecutorService() {
+        return MoreExecutors.listeningDecorator(executorService());
     }
 
 }

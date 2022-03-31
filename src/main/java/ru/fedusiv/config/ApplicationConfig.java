@@ -4,6 +4,7 @@ import freemarker.template.TemplateExceptionHandler;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.ClassRelativeResourceLoader;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -46,6 +47,7 @@ public class ApplicationConfig implements WebMvcConfigurer {
     }
 
     @Bean
+    @Profile("email")
     public JavaMailSenderImpl mailSender() {
         return new JavaMailSenderImpl();
     }
@@ -62,6 +64,7 @@ public class ApplicationConfig implements WebMvcConfigurer {
     }
 
     @Bean
+    @Profile("email")
     public Properties mailProperties() {
         Properties properties = new Properties();
         properties.put("mail.smtp.starttls.enable", status);

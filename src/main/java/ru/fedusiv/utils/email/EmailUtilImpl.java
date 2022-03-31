@@ -3,6 +3,7 @@ package ru.fedusiv.utils.email;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.mail.MailProperties;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -14,6 +15,7 @@ import java.util.concurrent.ExecutorService;
 
 @Component
 @PropertySource("classpath:email_sender.properties")
+@Profile("email")
 public class EmailUtilImpl implements EmailUtil {
 
     @Autowired

@@ -21,10 +21,13 @@ public class RabbitConfiguration {
     @Value("${rabbitmq.exchange}")
     private String exchange;
 
+    @Value("${rabbitmq.host}")
+    private String rabbitmqHost;
+
     @Bean
     public ConnectionFactory connectionFactory() {
 
-        CachingConnectionFactory connectionFactory = new CachingConnectionFactory("localhost");
+        CachingConnectionFactory connectionFactory = new CachingConnectionFactory(rabbitmqHost);
 
         connectionFactory.setPublisherConfirmType(CachingConnectionFactory.ConfirmType.CORRELATED);
         connectionFactory.setUsername("guest");

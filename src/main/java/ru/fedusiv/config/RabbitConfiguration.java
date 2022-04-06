@@ -12,9 +12,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.Arrays;
-import java.util.List;
-
 @Configuration
 public class RabbitConfiguration {
 
@@ -42,16 +39,22 @@ public class RabbitConfiguration {
         return new TopicExchange(exchange);
     }
 
+    @Bean Queue textQueue()  { return new Queue("files_text", true); }
+    @Bean Queue audioQueue() { return new Queue("files_audio", true); }
+    @Bean Queue videoQueue() { return new Queue("files_video", true); }
+    @Bean Queue imageQueue() { return new Queue("files_image", true); }
 
-    @Bean
-    List<Binding> bindings(TopicExchange exchange) {
-        return Arrays.asList(
-                BindingBuilder.bind(new Queue("files_audio", true)).to(exchange).with("files.audio.#"),
-                BindingBuilder.bind(new Queue("files_video", true)).to(exchange).with("files.video.#"),
-                BindingBuilder.bind(new Queue("files_text", true)).to(exchange).with("files.text.#"),
-                BindingBuilder.bind(new Queue("files_image", true)).to(exchange).with("files.image.#")
-        );
-    }
+    @Bean Binding textBinding(TopicExchange exchange)
+    { return BindingBuilder.bind(textQueue()).to(exchange).with("files.text.#"); }
+
+    @Bean Binding audioBinding(TopicExchange exchange)
+    { return BindingBuilder.bind(audioQueue()).to(exchange).with("files.audio.#"); }
+
+    @Bean Binding videoBinding(TopicExchange exchange)
+    { return BindingBuilder.bind(videoQueue()).to(exchange).with("files.video.#"); }
+
+    @Bean Binding imageBinding(TopicExchange exchange)
+    { return BindingBuilder.bind(imageQueue()).to(exchange).with("files.image.#"); }
 
     @Bean
     public RabbitAdmin amqpAdmin() {

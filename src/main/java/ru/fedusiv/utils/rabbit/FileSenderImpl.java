@@ -32,8 +32,7 @@ public class FileSenderImpl implements FileSender {
 
         for (MultipartFile file: files) {
             try {
-                Integer randInt = random.nextInt(10) + 1;
-                randInt = 10;
+                Integer randInt = 10;
                 Message fileVal = new Message(file.getBytes());
 
                 fileVal.getMessageProperties().setHeader("id", randInt);

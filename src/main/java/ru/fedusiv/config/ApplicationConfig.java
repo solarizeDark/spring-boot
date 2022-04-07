@@ -54,7 +54,8 @@ public class ApplicationConfig implements WebMvcConfigurer {
 
     @Bean
     public freemarker.template.Configuration configuration() {
-        freemarker.template.Configuration configuration = new freemarker.template.Configuration(freemarker.template.Configuration.VERSION_2_3_30);
+        freemarker.template.Configuration configuration =
+                new freemarker.template.Configuration(freemarker.template.Configuration.VERSION_2_3_30);
         configuration.setDefaultEncoding("UTF-8");
         configuration.setTemplateLoader(
                 new SpringTemplateLoader(new ClassRelativeResourceLoader(this.getClass()),

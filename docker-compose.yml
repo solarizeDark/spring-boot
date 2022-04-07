@@ -1,10 +1,14 @@
 version: '0.1'
+
+volumes:
+  redis_vol:
+
 services:
   web-app:
     image: main-server
     hostname: main-server
     ports:
-      - "8080:8080"
+      - "8089:8080"
   rabbitmq:
     image: rabbitmq:3.8.3-management-alpine
     hostname: rabbitmq
@@ -20,4 +24,18 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=secret229
     ports:
-      - "5432:5432"
+      - "5433:5432"
+  files:
+    image: files-server
+    hostname: files-server
+    ports:
+      - "9090:9090"
+    volumes:
+      - E:\Docker\volumes\files:/files
+  redis:
+    image: redis-n
+    hostname: redis
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_vol:/data

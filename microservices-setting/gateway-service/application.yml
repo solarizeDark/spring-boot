@@ -1,16 +1,15 @@
 spring:
   application:
-    name: main-service
+    name: gateway
 
 eureka:
   client:
     service-url:
       default-zone: http://localhost:8761/eureka
+    fetch-registry: true
   instance:
     instance-id: ${spring.application.name}
     hostname: localhost
 
-#    instance-id: ${spring.application.name}:${random.value}
-
 server:
-  port: 8080
+  port: 80

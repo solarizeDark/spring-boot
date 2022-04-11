@@ -17,7 +17,7 @@ public class GatewayApplication {
                 .route("students-service",
                         r -> r.path("/students-service/**")
                         .filters(f -> f.stripPrefix(1))
-                        .uri("http://localhost:8080/"))
+                        .uri("lb://MAIN-SERVICE"))
                 .build();
     }
 

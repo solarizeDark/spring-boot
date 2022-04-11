@@ -1,6 +1,6 @@
 HELP.md
 target/
-!.mvn/wrapper/maven-wrapper.jar
+!students-service/.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
 
@@ -32,7 +32,7 @@ build/
 ### VS Code ###
 .vscode/
 
-.mvn/
-/src/main/resources/META-INF/additional-spring-configuration-metadata.json
-/mvnw
-/mvnw.cmd
+students-service/.mvn/
+/students-service/src/main/resources/META-INF/additional-spring-configuration-metadata.json
+/students-service/mvnw
+/students-service/mvnw.cmd

@@ -1,0 +1,42 @@
+GET http://localhost:8080/students/74
+
+###
+
+GET http://localhost:8080/students/group/a0001
+
+###
+
+GET http://localhost:53755/students/group/a0001
+
+###
+
+GET http://localhost:8080/groups/a0001
+
+###
+
+GET http://localhost:8080/students/getAll
+
+###
+
+GET http://localhost:53755/students/getAll
+
+###
+
+GET http://localhost:8080/students/age?left=22&right=24
+
+###
+
+GET http://localhost:8080/students/initials?name=Egor&surname=Fedusiv
+
+###
+
+GET http://localhost:9000/actuator/health
+
+###
+
+GET http://localhost:9000/actuator
+
+###
+
+GET http://localhost:9000/actuator/loggers
+

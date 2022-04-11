@@ -1,0 +1,25 @@
+version: '0.1'
+
+volumes:
+  files-server-storage:
+
+networks:
+  rabbit-shared:
+    external: true
+
+services:
+  web-app:
+    image: files-server
+    hostname: files-server
+    ports:
+      - "9090:9090"
+    networks:
+      - rabbit-shared
+    volumes:
+      - files-server-storage:/storage
+  redis:
+    image: redis:6.2-alpine
+    ports:
+      - '6379:6379'
+    networks:
+      - rabbit-shared

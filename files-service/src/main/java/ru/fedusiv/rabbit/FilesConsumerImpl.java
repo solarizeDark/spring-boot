@@ -8,11 +8,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-import ru.fedusiv.redis.FilesRepository;
+import ru.fedusiv.entities.File;
+import ru.fedusiv.repositories.FilesRepository;
 
+import java.time.LocalDate;
 import java.util.concurrent.ExecutionException;
 
 @Component
@@ -26,9 +29,10 @@ public class FilesConsumerImpl implements FilesConsumer {
     private ListeningExecutorService listeningExecutorService;
 
     @Autowired
+    @Qualifier("postgres")
     private FilesRepository filesRepository;
 
-    public void savesStorageAndFilesystem(Message message, String folder) throws ExecutionException, InterruptedException {
+    public void savesStorageAndFilesystem(Message message, String folder) {
 
         ListenableFuture<String> fileName =
                 listeningExecutorService.submit(() -> filesLoader.saveFile(message, folder));
@@ -37,11 +41,16 @@ public class FilesConsumerImpl implements FilesConsumer {
             @Override
             public void onSuccess(String s) {
                 try {
-                    filesRepository.save(
-                            fileName.get(),
-                            Long.valueOf(message.getMessageProperties().getHeader("id").toString()),
-                            message.getMessageProperties().getHeader("filename")
-                    );
+
+                    File file = File.builder()
+                            .created(LocalDate.now())
+                            .location(fileName.get())
+                            .userId(Long.valueOf(message.getMessageProperties().getHeader("id")
+                                    .toString()))
+                            .filename(message.getMessageProperties().getHeader("filename"))
+                            .build();
+
+                    filesRepository.save(file);
                 } catch (InterruptedException | ExecutionException e) {
                     throw new IllegalArgumentException(e);
                 }

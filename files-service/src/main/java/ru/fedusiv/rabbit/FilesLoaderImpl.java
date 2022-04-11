@@ -2,6 +2,7 @@ package ru.fedusiv.rabbit;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -12,6 +13,9 @@ import java.util.UUID;
 @Slf4j
 public class FilesLoaderImpl implements FilesLoader {
 
+    @Value("${files.storage.path}")
+    private String fileStoragePath;
+
     @Override
     public String saveFile(Message message, String folder) {
 
@@ -20,7 +24,7 @@ public class FilesLoaderImpl implements FilesLoader {
 
         String fileName = tag + "_" + name;
 
-        File file = new File("files/" + folder + "/" + fileName);
+        File file = new File(fileStoragePath + File.separator + folder + File.separator + fileName);
 
         log.info("can write: " + file.canWrite());
 

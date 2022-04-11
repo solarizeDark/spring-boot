@@ -8,12 +8,6 @@ import org.springframework.stereotype.Repository;
 // redis-server.exe redis.windows.conf
 // redis-cli.exe
 
-/*
-
-    <file type : user id> -> <file name : garbage>
-
- */
-
 @Repository
 public class FilesRepositoryRedisImpl implements FilesRepository {
 

@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: gateway
+
+eureka:
+  client:
+    service-url:
+      default-zone: http://localhost:8761/eureka
+    fetch-registry: true
+  instance:
+    instance-id: ${spring.application.name}
+
+server:
+  port: 80

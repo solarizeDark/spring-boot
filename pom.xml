@@ -11,6 +11,8 @@
 
     <modules>
         <module>students-service</module>
+        <module>gateway-service</module>
+        <module>files-service</module>
     </modules>
 
     <name>services</name>

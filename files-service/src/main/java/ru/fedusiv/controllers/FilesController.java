@@ -8,7 +8,7 @@ import ru.fedusiv.services.FilesService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/file-api")
+@RequestMapping("/files-api")
 public class FilesController {
 
     @Autowired

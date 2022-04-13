@@ -40,3 +40,6 @@ GET http://localhost:9000/actuator
 
 GET http://localhost:9000/actuator/loggers
 
+###
+
+GET http://localhost:52074/user/files/10
